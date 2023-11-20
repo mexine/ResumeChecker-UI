@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="uploadContainer" id="uploadContainer">
+        <div class="uploadBtnCont">
+            <input type="file" id="fileInput" multiple accept=".pdf,.docx" style="display: none;">
+            <button class="uploadButton">Upload</button>
+        </div>
+
+        <div class="dragDrop">
+            <p class="dragDropCont">
+                or Drop your files here
+            </p>
+        </div>
+    </div>
+
+    <div class="table">
+        <table id="fileTable">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Files will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="jobDescriptionCont">
+        <textarea name="jobDescription" id="jobDescription" cols="30" rows="10"></textarea>
+        <button class="analyzeButton">Analyze</button>
+
+        <button class="clearButton">Clear</button>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-storage-compat.js"></script>
+    <script type="module" src="{{ url_for('static', filename='script.js') }}"></script> <!-- Your custom JavaScript file -->
+</body>
+</html>
