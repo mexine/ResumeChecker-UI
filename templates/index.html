@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div class="ResumeCheckerHeader">
+        Resume Checker
+    </div>
+
     <div class="uploadContainer" id="uploadContainer">
         <div class="uploadBtnCont">
             <input type="file" id="fileInput" multiple accept=".pdf,.docx" style="display: none;">
@@ -20,23 +24,50 @@
         </div>
     </div>
 
-    <div class="table">
-        <table id="fileTable">
-            <thead>
-                <tr>
-                    <th>File Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Files will be dynamically inserted here -->
-            </tbody>
-        </table>
+    <div>
+        <div class="tableHeader">Transformer Encoder</div>
+
+        <div class="table">
+            <table id="fileTable">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Files will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table1Header">Bag of Words</div>
+
+        <div class="table1">
+            <table id="fileTable1">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Files will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <button class="exportButton">Export</button>
+            <button class="tableClearButton">Clear</button>
+        </div>
     </div>
 
-    <div class="jobDescriptionCont">
-        <textarea name="jobDescription" id="jobDescription" cols="30" rows="10"></textarea>
-        <button class="analyzeButton">Analyze</button>
+    <div class="jobDescriptionHeader">
+        Job Description
+    </div>
 
+    <div>
+        <textarea class="jobDescriptionCont" name="jobDescription" id="jobDescription" cols="30" rows="10"></textarea>
+        <button class="analyzeButton">Analyze</button>
         <button class="clearButton">Clear</button>
     </div>
 
