@@ -75,19 +75,16 @@ async function displayFilesInTable() {
   const listResult = await listAll(storageRef);
   const files = listResult.items;
 
-  const tableBody = document.querySelector('#fileTable1 tbody');
+  const tableBody = document.querySelector('#fileTable tbody');
+  const tableBody1 = document.querySelector('#fileTable1 tbody');
+
   tableBody.innerHTML = ''; // Clear the existing table content
+  tableBody1.innerHTML = ''; // Clear the existing table content
 
   files.forEach((file) => {
     const fileName = file.name;
 
-    const fileRow = document.createElement('tr');
-
-    // First column for Rank 
-    const rankCell = document.createElement('td');
-    fileRow.appendChild(rankCell);
-
-    // Second column for File Name (as hyperlink)
+    // Second column for File Name (as hyperlink) -- both tables
     const fileNameCell = document.createElement('td');
     const fileLink = document.createElement('a');
     fileLink.textContent = fileName;
@@ -96,13 +93,28 @@ async function displayFilesInTable() {
     fileLink.href = downloadURL;
     fileLink.target = "_blank"; // Open link in a new tab
     fileNameCell.appendChild(fileLink);
-    fileRow.appendChild(fileNameCell);
 
-    // Third column for Qualification 
+    // First table
+    const fileRow = document.createElement('tr');
+    const rankCell = document.createElement('td');
+    fileRow.appendChild(rankCell)
+    fileRow.appendChild(fileNameCell);
     const qualificationCell = document.createElement('td');
     fileRow.appendChild(qualificationCell);
 
     tableBody.appendChild(fileRow);
+
+    // Second table
+    const fileRow1 = document.createElement('tr');
+    const rankCell1 = document.createElement('td');
+    fileRow1.appendChild(rankCell1)
+    fileRow1.appendChild(fileNameCell.cloneNode('true')); //clone the file name column
+    const qualificationCell1 = document.createElement('td');
+    fileRow1.appendChild(qualificationCell1);
+
+    tableBody1.appendChild(fileRow1);
+
+
   });
 }
 
