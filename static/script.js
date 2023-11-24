@@ -70,41 +70,39 @@ async function uploadFiles(files) {
 }
 
 
-
-// Function to display files in the table
 async function displayFilesInTable() {
   const storageRef = ref(storage, 'resumes/');
   const listResult = await listAll(storageRef);
   const files = listResult.items;
 
-  const tableBody = document.querySelector('#fileTable tbody');
+  const tableBody = document.querySelector('#fileTable1 tbody');
   tableBody.innerHTML = ''; // Clear the existing table content
-
-  const fileNamesSet = new Set(); // To track unique filenames
 
   files.forEach((file) => {
     const fileName = file.name;
-    if (!fileNamesSet.has(fileName)) {
-      const fileRow = document.createElement('tr');
 
-      // First column for rank
-      const rankCell = document.createElement('td');
-      fileRow.appendChild(rankCell);
+    const fileRow = document.createElement('tr');
 
-      // Second column for file name
-      const fileNameCell = document.createElement('td');
-      fileNameCell.textContent = fileName;
-      fileRow.appendChild(fileNameCell);
+    // First column for Rank 
+    const rankCell = document.createElement('td');
+    fileRow.appendChild(rankCell);
 
-      // Third column for Qualification
-      const qualificationCell = document.createElement('td');
-      fileRow.appendChild(qualificationCell);
+    // Second column for File Name (as hyperlink)
+    const fileNameCell = document.createElement('td');
+    const fileLink = document.createElement('a');
+    fileLink.textContent = fileName;
+    const storagePath = encodeURIComponent(file.fullPath);
+    const downloadURL = `https://firebasestorage.googleapis.com/v0/b/resumechecker-76d41.appspot.com/o/${storagePath}?alt=media`;
+    fileLink.href = downloadURL;
+    fileLink.target = "_blank"; // Open link in a new tab
+    fileNameCell.appendChild(fileLink);
+    fileRow.appendChild(fileNameCell);
 
-      // Fourth column for check box
-      
-      tableBody.appendChild(fileRow);
-      fileNamesSet.add(fileName);
-    }
+    // Third column for Qualification 
+    const qualificationCell = document.createElement('td');
+    fileRow.appendChild(qualificationCell);
+
+    tableBody.appendChild(fileRow);
   });
 }
 
