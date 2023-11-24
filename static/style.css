@@ -156,7 +156,6 @@ body {
     background-color: #F1F6FF;
     border-radius: 0px 0px 10px 10px;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-    text-align: left;
     height: 78%; 
     width: 33.5%;
     position: absolute;
@@ -165,15 +164,35 @@ body {
     overflow: auto;
 }
 
-.table th, .table td, .table tr {
+.table th,
+.table td,
+.table tr {
     background-color: white;
-    text-align: left;
     padding: 5px;
-    width: 25%;
     max-width: 150px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.table th {
+    text-align: center;
+    color: #103F91;
+}
+
+.table td:nth-child(1),
+.table th:nth-child(1) {
+    width: 15%;
+}
+
+.table td:nth-child(2),
+.table th:nth-child(2) {
+    width: 50%;
+}
+
+.table td:nth-child(3),
+.table th:nth-child(3) {
+    width: 10%;
 }
 
 .table1Header {
@@ -196,7 +215,6 @@ body {
     background-color: #F1F6FF;
     border-radius: 0px 0px 10px 10px;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-    text-align: left;
     height: 78%; 
     width: 33.5%;
     position: absolute;
@@ -205,16 +223,37 @@ body {
     overflow: auto;
 }
 
-.table1 th, .table1 td, .table1 tr {
+.table1 th,
+.table1 td,
+.table1 tr {
     background-color: white;
-    text-align: left;
     padding: 5px;
-    width: 25%;
     max-width: 150px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.table1 th {
+    text-align: center;
+    color: #103F91;
+}
+
+.table1 td:nth-child(1),
+.table1 th:nth-child(1) {
+    width: 15%;
+}
+
+.table1 td:nth-child(2),
+.table1 th:nth-child(2) {
+    width: 50%;
+}
+
+.table1 td:nth-child(3),
+.table1 th:nth-child(3) {
+    width: 10%;
+}
+
 
 
 #results {
