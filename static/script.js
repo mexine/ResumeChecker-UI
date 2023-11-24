@@ -86,9 +86,22 @@ async function displayFilesInTable() {
     const fileName = file.name;
     if (!fileNamesSet.has(fileName)) {
       const fileRow = document.createElement('tr');
+
+      // First column for rank
+      const rankCell = document.createElement('td');
+      fileRow.appendChild(rankCell);
+
+      // Second column for file name
       const fileNameCell = document.createElement('td');
       fileNameCell.textContent = fileName;
       fileRow.appendChild(fileNameCell);
+
+      // Third column for Qualification
+      const qualificationCell = document.createElement('td');
+      fileRow.appendChild(qualificationCell);
+
+      // Fourth column for check box
+      
       tableBody.appendChild(fileRow);
       fileNamesSet.add(fileName);
     }

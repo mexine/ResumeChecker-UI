@@ -155,16 +155,22 @@ body {
 .table {
     border: 1px solid #ccc;
     background-color: #F1F6FF;
-    padding: 1%;
     border-radius: 0px 0px 10px 10px;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
     text-align: left;
-    height: 74%; 
-    width: 31.5%;
+    height: 77.5%; 
+    width: 33.5%;
     position: absolute;
     top: 10%; 
     left: 30%; 
     overflow-y: scroll;
+}
+
+.table th, table td {
+    background-color: white;
+    text-align: left;
+    padding: 8px;
+    width: 25%;
 }
 
 .table1Header {
