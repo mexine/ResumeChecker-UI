@@ -94,11 +94,13 @@ async function uploadFiles(files) {
     const file = files[i];
     const fileName = file.name;
 
+    
     if (!isFileAllowed(file)) {
       invalidFiles.push(fileName);
       continue; // Skip uploading invalid file
     }
 
+    //For TE table
     if (existingTeFiles.includes(fileName)) {
       duplicateTeFiles.push(fileName);
     } else {
@@ -112,6 +114,7 @@ async function uploadFiles(files) {
       }
     }
 
+    // For BoW table
     if (existingBowFiles.includes(fileName)) {
       duplicateBowFiles.push(fileName);
     } else {
@@ -276,4 +279,87 @@ selectAllBOWCheckbox.addEventListener('change', function () {
 const tableClearbtn = document.querySelector('.tableClearButton');
 tableClearbtn.addEventListener('click', function(){
   deleteSelectedFiles(teFolderRef, bowFolderRef);
+});
+
+// Function to download all files from Firebase Storage to the "localStorage" folder
+async function downloadAllFiles() {
+  try {
+    const localStorageFolder = 'ResumeDownloads';
+
+    // Trigger the Flask route '/download_from_firebase'
+    await fetch('/download_from_firebase');
+    const allFilesRef = ref(storage);
+    const allFilesList = await listAll(allFilesRef);
+
+    const downloadPromises = allFilesList.items.map(async (fileRef) => {
+      const downloadUrl = await getDownloadURL(fileRef);
+      const response = await fetch(downloadUrl);
+      const blob = await response.blob();
+
+      // Save the file to the "localStorage" folder
+      const localFilePath = localStorageFolder + '/' + fileRef.name;
+      const localFile = new File([blob], fileRef.name);
+      const link = document.createElement('a');
+
+      link.href = URL.createObjectURL(localFile);
+      link.download = localFilePath;
+      link.click();
+    });
+
+    await Promise.all(downloadPromises);
+    alert('All files downloaded to "ResumeDownloads" folder.');
+  } catch (error) {
+    console.error('Error downloading files:', error);
+    alert('Failed to download files.');
+  }
+}
+
+/*async function evaluateResumesByBoW() {
+  try {
+    await fetch('/analyze_bow', {
+      method: 'POST' // Specify the method as POST
+    });
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}*/
+
+async function analyzeBoW() {
+  try {
+    const jobDescription = document.getElementById('jobDescription').value; // Get job description string from textarea
+  
+    const response = await fetch('/analyze_bow', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ jobDescription: jobDescription })
+    });
+
+    const data = await response.json(); // Parse JSON response
+
+    const tableBody = document.querySelector('#fileTable1 tbody');
+    tableBody.innerHTML = ''; // Clear any existing rows in the table
+
+    data.results.forEach(item => {
+      const resumeLink = `${item.FilePath}`;
+      const newRow = `
+        <tr>
+          <td>${item.Rank}</td>
+          <td><a href="${resumeLink}" target="_blank">${item.Filename}</a></td>
+          <td>${item.Similarity}</td>
+          <td><input type="checkbox"></td>
+        </tr>
+      `;
+      tableBody.insertAdjacentHTML('beforeend', newRow);
+    });
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+// Event listener for the "Analyze" button to trigger the download of all files
+const analyzeButton = document.querySelector('.analyzeButton');
+analyzeButton.addEventListener('click', function() {
+  analyzeBoW();
 });
