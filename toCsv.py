@@ -19,6 +19,7 @@ def read_docx_content(blob):
     full_text = []
     for para in doc.paragraphs:
         full_text.append(para.text)
+    print(full_text)
     return '\n'.join(full_text)
 
 # Function to read the contents of a PDF file
@@ -28,6 +29,7 @@ def read_pdf_content(blob):
     full_text = ''
     for page in pdf_document:
         full_text += page.get_text()
+    print(full_text)
     return full_text
 
 # Function to generate download URL with manually inserted %2F
@@ -50,13 +52,16 @@ for blob in files:
 
     if blob.name.endswith('.pdf'):
         file_content = read_pdf_content(blob)
-        if not file_content:
-            file_content = '&&PLACEHOLDER&&'  # Replace with literal placeholder text to prevent TE from locking.
+        if file_content:  # Check if file_content is not empty
+            file_url = generate_download_url(blob.name)
+            data[folder_name].append([filename, file_content, file_url])
 
     elif blob.name.endswith('.docx'):
         file_content = read_docx_content(blob)
-        if not file_content:
-            file_content = '&&PLACEHOLDER&&'  
+        if file_content:  # Check if file_content is not empty
+            file_url = generate_download_url(blob.name)
+            data[folder_name].append([filename, file_content, file_url])
+
 
     file_url = generate_download_url(blob.name)
     data[folder_name].append([filename, file_content, file_url])
@@ -69,6 +74,7 @@ def write_to_csv(file_name, dataset):
         csv_writer = csv.writer(csvfile)
         csv_writer.writerow(['Filename', 'Contents', 'File_URL'])  # Writing headers
         csv_writer.writerows(dataset)
+
 
     print(f"CSV file '{csv_file_path}' has been created with the resumes from '{file_name}' folder.")
 
