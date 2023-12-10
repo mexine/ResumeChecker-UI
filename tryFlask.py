@@ -167,7 +167,7 @@ model = Sequential([
             Dense([model_dim, vocab_size], Softmax)
 ])
 
-model.load_model('transformer_encoder/model_weights.txt')
+# model.load_model('transformer_encoder/model_weights.txt')
 
 model.remove_mlm_head()
 
