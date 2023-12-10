@@ -1,16 +1,14 @@
-// Import the functions you need from the SDKs you need
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
 import { getStorage, ref, listAll, uploadBytes, deleteObject } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-storage.js";
 
-// Your web app's Firebase configuration
+// Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBRdp6TQsoPo4PDkMPQErqg2GMmCLwigUQ",
-  authDomain: "resumechecker-76d41.firebaseapp.com",
-  projectId: "resumechecker-76d41",
-  storageBucket: "resumechecker-76d41.appspot.com",
-  messagingSenderId: "509510006446",
-  appId: "1:509510006446:web:ebbf01eb9e9713f0bd1f3f"
+  apiKey: "AIzaSyBVsmsAJNwokMv84gOIXjIPjbeCna63_9M",
+  authDomain: "resume-checker-2.firebaseapp.com",
+  projectId: "resume-checker-2",
+  storageBucket: "resume-checker-2.appspot.com",
+  messagingSenderId: "654874221520",
+  appId: "1:654874221520:web:703d1e763d5710784177d5"
 };
 
 // Initialize Firebase
@@ -24,12 +22,65 @@ function isFileAllowed(file) {
 }
 
 // Function to delete selected files using checkbox
-async function deleteSelectedFiles(teFolderRef, bowFolderRef) {
-  const checkboxsTE = document.querySelectorAll('#fileTable .deleteCheckbox');
-  const checkboxsBOW = document.querySelectorAll('#fileTable1 .deleteCheckbox');
+// async function deleteSelectedFiles(teFolderRef, bowFolderRef) {
+//   const checkboxsTE = document.querySelectorAll('#fileTable .deleteCheckbox');
+//   const checkboxsBOW = document.querySelectorAll('#fileTable1 .deleteCheckbox');
 
-  checkboxsTE.forEach(async (checkbox, index) => {
-    if(checkbox.checked) {
+//   checkboxsTE.forEach(async (checkbox, index) => {
+//     if(checkbox.checked) {
+//       const row = checkbox.parentNode.parentNode;
+//       const fileName = row.cells[1].textContent.trim();
+
+//       try {
+//         // Delete from TE folder
+//         const teFileRef = ref(teFolderRef, fileName);
+//         await deleteObject(teFileRef);
+//         console.log('File $(fileName) deleted from TE folder');
+//       } catch (error) {
+//         console.error('Error');
+//       }
+
+//       // Remove from TE table
+//       row.parentNode.removeChild(row);
+//     }
+
+//   })
+
+//   checkboxsBOW.forEach(async (checkbox, index) => {
+//     if(checkbox.checked) {
+//       const row = checkbox.parentNode.parentNode;
+//       const fileName = row.cells[1].textContent.trim();
+
+//       try {
+//         // Delete from BOW folder
+//         const bowFileRef = ref(bowFolderRef, fileName);
+//         await deleteObject(bowFileRef);
+//         console.log('File $(fileName) deleted from BOW folder');
+//       } catch (error) {
+//         console.error('Error');
+//       }
+
+//       // Remove from BOW table
+//       row.parentNode.removeChild(row);
+//     }
+
+//   })
+
+//   // Reset the Select All checkbox after deletion
+//   const selectAllTECheckbox = document.getElementById('selectAllTE');
+//   const selectAllBOWCheckbox = document.getElementById('selectAllBOW');
+
+//   selectAllTECheckbox.checked = false;
+//   selectAllBOWCheckbox.checked = false;
+// }
+
+// Function to delete selected files using checkbox
+async function deleteSelectedFiles(teFolderRef, bowFolderRef) {
+  const checkboxesTE = document.querySelectorAll('#fileTable .deleteCheckbox');
+  const checkboxesBOW = document.querySelectorAll('#fileTable1 .deleteCheckbox');
+
+  checkboxesTE.forEach(async (checkbox) => {
+    if (checkbox.checked) {
       const row = checkbox.parentNode.parentNode;
       const fileName = row.cells[1].textContent.trim();
 
@@ -37,19 +88,18 @@ async function deleteSelectedFiles(teFolderRef, bowFolderRef) {
         // Delete from TE folder
         const teFileRef = ref(teFolderRef, fileName);
         await deleteObject(teFileRef);
-        console.log('File $(fileName) deleted from TE folder');
+        console.log(`File ${fileName} deleted from TE folder`);
       } catch (error) {
-        console.error('Error');
+        console.error('Error deleting file from TE folder:', error);
       }
 
       // Remove from TE table
       row.parentNode.removeChild(row);
     }
+  });
 
-  })
-
-  checkboxsBOW.forEach(async (checkbox, index) => {
-    if(checkbox.checked) {
+  checkboxesBOW.forEach(async (checkbox) => {
+    if (checkbox.checked) {
       const row = checkbox.parentNode.parentNode;
       const fileName = row.cells[1].textContent.trim();
 
@@ -57,18 +107,17 @@ async function deleteSelectedFiles(teFolderRef, bowFolderRef) {
         // Delete from BOW folder
         const bowFileRef = ref(bowFolderRef, fileName);
         await deleteObject(bowFileRef);
-        console.log('File $(fileName) deleted from BOW folder');
+        console.log(`File ${fileName} deleted from BOW folder`);
       } catch (error) {
-        console.error('Error');
+        console.error('Error deleting file from BOW folder:', error);
       }
 
       // Remove from BOW table
       row.parentNode.removeChild(row);
     }
+  });
 
-  })
-
-  // Reset the Select All checkbox after deletion
+  // Uncheck the "Select All" checkboxes after deletion
   const selectAllTECheckbox = document.getElementById('selectAllTE');
   const selectAllBOWCheckbox = document.getElementById('selectAllBOW');
 
@@ -77,6 +126,7 @@ async function deleteSelectedFiles(teFolderRef, bowFolderRef) {
 }
 
 async function uploadFiles(files) {
+  alert("Starting upload of resumes.")
   const teFolderRef = ref(storage, 'TEfolder/');
   const bowFolderRef = ref(storage, 'BoWfolder/');
 
@@ -94,11 +144,15 @@ async function uploadFiles(files) {
     const file = files[i];
     const fileName = file.name;
 
+    console.log('uploading file: ' + i + ' ' + fileName)
+
+
     if (!isFileAllowed(file)) {
       invalidFiles.push(fileName);
       continue; // Skip uploading invalid file
     }
 
+    //For TE table
     if (existingTeFiles.includes(fileName)) {
       duplicateTeFiles.push(fileName);
     } else {
@@ -112,6 +166,7 @@ async function uploadFiles(files) {
       }
     }
 
+    // For BoW table
     if (existingBowFiles.includes(fileName)) {
       duplicateBowFiles.push(fileName);
     } else {
@@ -124,6 +179,7 @@ async function uploadFiles(files) {
         continue; // Skip uploading invalid file
       }
     }
+
   }
 
   // Display alert for duplicate files in TEfolder, if any
@@ -140,6 +196,14 @@ async function uploadFiles(files) {
   if (invalidFiles.length > 0) {
     alert(`Invalid files detected: ${invalidFiles.join(', ')}`);
   }
+
+  fetch('/datasetprocess')
+      .then(response => {
+        console.log('local CSV files are updated!')
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
 
   // Refresh the displayed files in the table
   displayFilesInTable(teFolderRef, bowFolderRef);
@@ -166,6 +230,14 @@ async function displayFilesInTable(teFolderRef, bowFolderRef) {
   bowFiles.forEach((file) => {
     displayFileInTable(file, tableBody1);
   });
+
+  fetch('/datasetprocess')
+    .then(response => {
+      console.log('local CSV files are updated!')
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 }
 
 function displayFileInTable(file, tableBody) {
@@ -201,7 +273,7 @@ function displayFileInTable(file, tableBody) {
   checkbox.className = 'deleteCheckbox';
   checkboxCell.appendChild(checkbox);
   fileRow.appendChild(checkboxCell);
-  
+
 }
 
 // Assuming you have storage references for TEfolder and BoWfolder
@@ -214,14 +286,14 @@ displayFilesInTable(teFolderRef, bowFolderRef);
 
 // Event listener for file input change
 const fileInput = document.getElementById('fileInput');
-fileInput.addEventListener('change', function() {
+fileInput.addEventListener('change', function () {
   const files = fileInput.files;
   uploadFiles(files);
 });
 
 // Event listener for upload button
 const uploadButton = document.querySelector('.uploadButton');
-uploadButton.addEventListener('click', function() {
+uploadButton.addEventListener('click', function () {
   fileInput.click();
 });
 
@@ -249,31 +321,166 @@ const clearButton = document.querySelector('.clearButton');
 const jobDescriptionTextArea = document.getElementById('jobDescription');
 
 // Add a click event listener to the clear button
-clearButton.addEventListener('click', function() {
+clearButton.addEventListener('click', function () {
   // Set the value of the textarea to an empty string to clear its content
   jobDescriptionTextArea.value = '';
 });
 
-// Event listener for Select All (TE) checkbox
+// // Event listener for Select All (TE) checkbox
+// const selectAllTECheckbox = document.getElementById('selectAllTE');
+// selectAllTECheckbox.addEventListener('change', function () {
+//   const checkboxesTE = document.querySelectorAll('#fileTable .deleteCheckbox');
+//   checkboxesTE.forEach((checkbox) => {
+//     checkbox.checked = selectAllTECheckbox.checked;
+//   });
+// });
+
+// // Event listener for Select All (BOW) checkbox
+// const selectAllBOWCheckbox = document.getElementById('selectAllBOW');
+// selectAllBOWCheckbox.addEventListener('change', function () {
+//   const checkboxesBOW = document.querySelectorAll('#fileTable1 .deleteCheckbox');
+//   checkboxesBOW.forEach((checkbox) => {
+//     checkbox.checked = selectAllBOWCheckbox.checked;
+//   });
+// });
+
+// // Deletion of files 
+// const tableClearbtn = document.querySelector('.tableClearButton');
+// tableClearbtn.addEventListener('click', function(){
+//   deleteSelectedFiles(teFolderRef, bowFolderRef);
+//   // update csv files
+
+//   fetch('/datasetprocess')
+//     .then(response => {
+//       console.log('local CSV files are updated!')
+//     })
+//     .catch(error => {
+//       console.error('Error:', error);
+//     });
+// });
+
+// Event listener for Clear button to delete selected files
+const tableClearButton = document.querySelector('.tableClearButton');
+tableClearButton.addEventListener('click', function () {
+  console.log('tableClearButton')
+  deleteSelectedFiles(teFolderRef, bowFolderRef);
+
+  fetch('/datasetprocess')
+  .then(response => {
+    console.log('local CSV files are updated!')
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+});
+
+// Function to handle "Select All" for checkboxes
+function handleSelectAll(checkbox, tableId) {
+  const checkboxes = document.querySelectorAll(`#${tableId} .deleteCheckbox`);
+  checkboxes.forEach((chkBox) => {
+    chkBox.checked = checkbox.checked;
+  });
+}
+
+// Event listener for "Select All" checkbox in TE table
 const selectAllTECheckbox = document.getElementById('selectAllTE');
 selectAllTECheckbox.addEventListener('change', function () {
-  const checkboxesTE = document.querySelectorAll('#fileTable .deleteCheckbox');
-  checkboxesTE.forEach((checkbox) => {
-    checkbox.checked = selectAllTECheckbox.checked;
-  });
+  handleSelectAll(selectAllTECheckbox, 'fileTable');
 });
 
-// Event listener for Select All (BOW) checkbox
+// Event listener for "Select All" checkbox in BOW table
 const selectAllBOWCheckbox = document.getElementById('selectAllBOW');
 selectAllBOWCheckbox.addEventListener('change', function () {
-  const checkboxesBOW = document.querySelectorAll('#fileTable1 .deleteCheckbox');
-  checkboxesBOW.forEach((checkbox) => {
-    checkbox.checked = selectAllBOWCheckbox.checked;
-  });
+  handleSelectAll(selectAllBOWCheckbox, 'fileTable1');
 });
 
-// Deletion of files 
-const tableClearbtn = document.querySelector('.tableClearButton');
-tableClearbtn.addEventListener('click', function(){
-  deleteSelectedFiles(teFolderRef, bowFolderRef);
+async function analyzeBoW() {
+  try {
+    const jobDescription = document.getElementById('jobDescription').value; // Get job description string from textarea
+   
+    if (jobDescription === '') {
+      alert('Analysis cannot proceed without a job description.');
+      return;
+    }
+
+    const response = await fetch('/analyze_bow', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ jobDescription: jobDescription })
+    });
+
+    const data = await response.json(); // Parse JSON response
+
+    const tableBody = document.querySelector('#fileTable1 tbody');
+    tableBody.innerHTML = ''; // Clear any existing rows in the table
+
+    data.results.forEach(item => {
+      const resumeLink = `${item.URL}`;
+      const newRow = `
+        <tr>
+          <td>${item.Rank}</td>
+          <td><a href="${resumeLink}" target="_blank">${item.Filename}</a></td>
+          <td>${item.Similarity}</td>
+          <td><input type="checkbox"></td>
+        </tr>
+      `;
+      tableBody.insertAdjacentHTML('beforeend', newRow);
+    });
+    alert("FinishedBow");
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+async function analyzeTE() {
+  console.log('analyzeTE')
+  try {
+    const jobDescription = document.getElementById('jobDescription').value; // Get job description string from textarea
+    console.log(jobDescription)
+    const response = await fetch('/analyze_te', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ jobDescription: jobDescription })
+    });
+
+    const data = await response.json(); // Parse JSON response
+
+    const tableBody = document.querySelector('#fileTable tbody');
+    tableBody.innerHTML = ''; // Clear any existing rows in the table
+
+    data.results.forEach(item => {
+      const resumeLink = `${item.URL}`;
+      const newRow = `
+        <tr>
+          <td>${item.Rank}</td>
+          <td><a href="${resumeLink}" target="_blank">${item.Filename}</a></td>
+          <td>${item.Similarity}</td>
+          <td><input type="checkbox"></td>
+        </tr>
+      `;
+      tableBody.insertAdjacentHTML('beforeend', newRow);
+    });
+    alert("FinishedTE");
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+// Event listener for the "Analyze" button to trigger the download of all files
+const analyzeButton = document.querySelector('.analyzeButton');
+analyzeButton.addEventListener('click', function () {
+  alert("Reading resumes...");
+  fetch('/datasetprocess')
+    .then(response => {
+      analyzeBoW(); // Analysis for table-side BoW
+      analyzeTE(); 
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 });
+
