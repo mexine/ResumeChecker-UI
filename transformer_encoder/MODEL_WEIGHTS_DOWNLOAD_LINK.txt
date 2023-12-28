@@ -1,0 +1,2 @@
+1. Download model_weights.npy from https://drive.google.com/file/d/1E1IuILQECHaIB7W_1q7Rjna-2uyFrLvO/view?usp=sharing
+2. Move model_weights.npy to this directory
