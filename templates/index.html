@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResumeChecker</title>
+    <title>Test</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -70,16 +70,15 @@
     <div class="jobDescriptionHeader">
         Job Description
     </div>
-    
+
     <div>
         <textarea class="jobDescriptionCont" name="jobDescription" id="jobDescription" cols="30" rows="10"></textarea>
-        <button class="analyzeButton">Analyze</button> <!-- Using HTML -> JS -> Flask route because form removes styles-->
+        <button class="analyzeButton">Analyze</button>
         <button class="clearButton">Clear</button>
     </div>
-    
-    
-    <!-- <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-storage-compat.js"></script> -->
+
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-storage-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script type="module" src="{{ url_for('static', filename='script.js') }}"></script> <!-- Your custom JavaScript file -->
 </body>
