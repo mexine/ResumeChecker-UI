@@ -126,14 +126,14 @@ async function deleteSelectedFiles(teFolderRef, bowFolderRef) {
 }
 
 async function downloadFile(url, fileName) {
-  fetch(url, { method: 'get', mode: 'no-cors', referrerPolicy: 'no-referrer' })
+  console.log(url)
+  fetch(url, { method: 'get'})
     .then(res => res.blob())
     .then(res => {
       const aElement = document.createElement('a');
       aElement.setAttribute('download', fileName);
       const href = URL.createObjectURL(res);
-      aElement.href = href;
-      // aElement.setAttribute('href', href);
+      aElement.setAttribute('href', href);
       aElement.setAttribute('target', '_blank');
       aElement.click();
       URL.revokeObjectURL(href);
@@ -149,7 +149,8 @@ async function downloadFiles() {
       const row = checkbox.parentNode.parentNode;
       const rank = row.cells[0].textContent
       const fileName = "TE_" + (rank > 0 ? rank : "#") + "_" + row.cells[1].textContent.trim();
-      const url = row.cells[1].getAttribute('href');
+      const url = row.cells[1].querySelector('a').getAttribute('href');
+      
 
       try {
         // Download from TE folder
@@ -166,7 +167,7 @@ async function downloadFiles() {
       const row = checkbox.parentNode.parentNode;
       const rank = row.cells[0].textContent
       const fileName = "BoW_" + (rank > 0 ? rank : "#") + "_" + row.cells[1].textContent.trim();
-      const url = row.cells[1].getAttribute('href');
+      const url = row.cells[1].querySelector('a').getAttribute('href');
 
       try {
         // Download from BOW folder
