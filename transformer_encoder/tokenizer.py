@@ -69,6 +69,7 @@ class Tokenizer:
 
         # split words and numbers from special characters
         return ['[CLS]'] + re.findall(r"\b\w+\b|\d+|[^\w\s]", text) + ['[SEP]']
+        # return re.findall(r"\b\w+\b|\d+|[^\w\s]", text)
 
     def truncate(self, tokens: list[str], max_pos: int):
         # truncate sentence that are longer than max_pos
@@ -76,6 +77,7 @@ class Tokenizer:
             num_split = math.ceil(len(tokens) / max_pos)
             # Split the list into n parts
             return [tokens[i * max_pos: (i + 1) * max_pos] for i in range(num_split)]
+            # return [tokens[:max_pos]]
         else:
             return [tokens]
     

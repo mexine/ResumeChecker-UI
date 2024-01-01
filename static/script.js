@@ -147,7 +147,8 @@ async function downloadFiles() {
   checkboxesTE.forEach(async (checkbox) => {
     if (checkbox.checked) {
       const row = checkbox.parentNode.parentNode;
-      const fileName = row.cells[1].textContent.trim();
+      const rank = row.cells[0].textContent
+      const fileName = "TE_" + (rank > 0 ? rank : "#") + "_" + row.cells[1].textContent.trim();
       const url = row.cells[1].getAttribute('href');
 
       try {
@@ -163,7 +164,8 @@ async function downloadFiles() {
   checkboxesBOW.forEach(async (checkbox) => {
     if (checkbox.checked) {
       const row = checkbox.parentNode.parentNode;
-      const fileName = row.cells[1].textContent.trim();
+      const rank = row.cells[0].textContent
+      const fileName = "BoW_" + (rank > 0 ? rank : "#") + "_" + row.cells[1].textContent.trim();
       const url = row.cells[1].getAttribute('href');
 
       try {
